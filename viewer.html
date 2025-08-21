@@ -2,75 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D Model Viewer</title>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
-    body { margin: 0; background: #222; }
+    body {
+      margin: 0;
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
     model-viewer {
       width: 100vw;
       height: 100vh;
+      background-color: #222;
     }
     .overlay {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      color: white;
-      font-size: 18px;
-      background: rgba(0,0,0,0.5);
-      padding: 5px 10px;
+      top: 15px;
+      left: 15px;
+      background: rgba(0,0,0,0.6);
+      padding: 8px 14px;
       border-radius: 8px;
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
-  <!-- Display user text -->
-  <div id="userText" class="overlay"></div>
 
-  <!-- Model Viewer with AR support -->
-  <model-viewer 
-    id="viewer"
-    src="" 
-    alt="3D Model" 
-    ar
-    ar-modes="scene-viewer quick-look webxr"
-    ar-scale="auto"
+  <!-- Model Viewer -->
+  <model-viewer id="mv" 
     camera-controls 
     auto-rotate 
-    shadow-intensity="1"
-    min-camera-orbit="auto auto 2m"
-    max-camera-orbit="auto auto 50m">
-    
-    <!-- AR button (shows on mobile devices) -->
-    <button slot="ar-button" style="
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fff;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 10px;
-      cursor: pointer;">
-      👓 View in AR
-    </button>
-
+    shadow-intensity="1" 
+    exposure="1" 
+    ar 
+    ar-modes="webxr scene-viewer quick-look">
   </model-viewer>
 
-  <script>
-    // Get params from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const modelFile = urlParams.get("model");
-    const userText = urlParams.get("text") || "";
+  <!-- Overlay Text -->
+  <div class="overlay" id="overlayText"></div>
 
-    if (modelFile) {
-      // IMPORTANT: if hosted on GitHub, use the RAW file URL
-      document.getElementById("viewer").src = modelFile;
-    }
-    if (userText) {
-      document.getElementById("userText").textContent = userText;
-    }
+  <script>
+    // Read parameters from URL
+    const params = new URLSearchParams(window.location.search);
+    const modelFile = params.get("model") || "1.glb";   // default file
+    const text = params.get("text") || "";              // default no text
+
+    // Assign model
+    const viewer = document.getElementById("mv");
+    viewer.src = modelFile;
+
+    // Assign overlay text
+    document.getElementById("overlayText").innerText = text;
   </script>
+
 </body>
 </html>
