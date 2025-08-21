@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Model Viewer</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body { margin: 0; background: #222; }
+    model-viewer {
+      width: 100vw;
+      height: 100vh;
+    }
+    .overlay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-size: 18px;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="userText" class="overlay"></div>
+
+  <model-viewer 
+    id="viewer"
+    src="" 
+    alt="3D Model" 
+    camera-controls 
+    auto-rotate 
+    shadow-intensity="1"
+    min-camera-orbit="auto auto 2m"
+    max-camera-orbit="auto auto 50m">
+  </model-viewer>
+
+  <script>
+    // Get params from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelFile = urlParams.get("model");
+    const userText = urlParams.get("text") || "";
+
+    if (modelFile) {
+      document.getElementById("viewer").src = modelFile;
+    }
+    if (userText) {
+      document.getElementById("userText").textContent = userText;
+    }
+  </script>
+</body>
+    </html>
