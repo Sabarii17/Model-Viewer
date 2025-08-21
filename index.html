@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Selection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #f9f9f9;
+    }
+    input, button {
+      font-size: 16px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .suggestions {
+      margin-top: 10px;
+      list-style-type: none;
+      padding: 0;
+      max-width: 200px;
+      margin: auto;
+    }
+    .suggestions li {
+      padding: 10px;
+      background-color: #f0f0f0;
+      cursor: pointer;
+      margin-top: 5px;
+      border-radius: 5px;
+    }
+    .suggestions li:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the 3D Model Viewer</h1>
+  <p>Enter a room name to view its 3D model:</p>
+
+  <input type="text" id="roomInput" placeholder="Type room name..." onkeyup="showSuggestions()" />
+  <ul id="suggestions" class="suggestions"></ul>
+
+  <p>Enter your text:</p>
+  <input type="text" id="userText" placeholder="Type here..." />
+
+  <br><br>
+  <button onclick="loadModel()">Load Model</button>
+
+  <script>
+    // Room mapping
+    const rooms = {
+      "room 101": "1st.glb",
+      "room 102": "2nd.glb"
+    };
+
+    function showSuggestions() {
+      const input = document.getElementById("roomInput").value.toLowerCase();
+      const suggestionsList = document.getElementById("suggestions");
+      suggestionsList.innerHTML = ""; // Clear old suggestions
+
+      for (let room in rooms) {
+        if (room.toLowerCase().includes(input)) {
+          let li = document.createElement("li");
+          li.textContent = room;
+          li.onclick = function () {
+            document.getElementById("roomInput").value = room;
+            suggestionsList.innerHTML = ""; // Clear suggestions after selection
+          };
+          suggestionsList.appendChild(li);
+        }
+      }
+    }
+
+    function loadModel() {
+      const roomName = document.getElementById("roomInput").value.toLowerCase();
+      const userText = document.getElementById("userText").value;
+      const modelFile = rooms[roomName];
+
+      if (modelFile) {
+        window.location.href = "viewer.html?model=" + encodeURIComponent(modelFile) + "&text=" + encodeURIComponent(userText);
+      } else {
+        alert("Room not found! Please enter a valid room.");
+      }
+    }
+  </script>
+</body>
+</html>
